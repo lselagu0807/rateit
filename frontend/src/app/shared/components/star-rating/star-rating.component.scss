@@ -1,0 +1,21 @@
+.stars {
+  display:     flex;
+  gap:         2px;
+  line-height: 1;
+
+  span {
+    color:      var(--surface2);
+    transition: color 0.15s, transform 0.15s;
+    &.filled  { color: inherit; }
+    &.interactive { cursor: pointer; }
+    &.interactive:hover { transform: scale(1.2); }
+  }
+
+  &--sm { font-size: 13px; }
+  &--md { font-size: 16px; }
+  &--lg { font-size: 22px; }
+
+  &--green  { color: var(--brand); }
+  &--yellow { color: var(--warning); }
+  &--red    { color: var(--danger); }
+}

@@ -1,0 +1,12 @@
+<div class="stars" [class]="'stars--' + size + ' stars--' + getColor(rating)">
+  @for (star of stars; track star) {
+    <span
+      [class.filled]="isFilled(star)"
+      [class.interactive]="interactive"
+      (mouseenter)="hovered = star"
+      (mouseleave)="hovered = 0"
+      (click)="select(star)">
+      ★
+    </span>
+  }
+</div>

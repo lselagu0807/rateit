@@ -1,0 +1,72 @@
+<canvas #particleCanvas class="particle-bg"></canvas>
+
+<section class="hero">
+  <h1 class="hero__title">Opiniones en las que<br><span>puedes confiar</span></h1>
+  <p class="hero__sub">Descubre empresas verificadas y comparte tu experiencia real.</p>
+
+  <div class="search-bar">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.35-4.35" />
+    </svg>
+    <input type="text" placeholder="Busca una empresa..." [(ngModel)]="searchQuery" (keyup.enter)="search()" />
+    <button class="btn-primary" (click)="search()">Buscar</button>
+  </div>
+</section>
+
+<!-- RESEÑAS RECIENTES -->
+<section class="section">
+  <div class="section-header">
+    <h2>Reseñas recientes</h2>
+    <a routerLink="/resenas" class="see-all">Ver todas →</a>
+  </div>
+
+  @if (loading()) {
+  <div class="spinner"></div>
+  } @else {
+  <div class="reviews-grid">
+    @for (r of resenas(); track r.id) {
+    <div class="review-card card">
+      <div class="review-card__meta">
+        <div class="review-card__avatar" [style.background]="avatarColor(r.usuario_nombre)">
+          {{ initials(r.usuario_nombre) }}
+        </div>
+        <div class="review-card__info">
+          <span class="review-card__name">{{ r.usuario_nombre }}</span>
+          <span class="review-card__company">{{ r.empresa_nombre }}</span>
+        </div>
+        <app-star-rating [rating]="r.puntuacion" size="sm" />
+      </div>
+      <p class="review-card__text">{{ r.cuerpo }}</p>
+      <span class="review-card__date">{{ timeAgo(r.created_at) }}</span>
+    </div>
+    }
+  </div>
+  }
+</section>
+
+<!-- TOP EMPRESAS -->
+<section class="section">
+  <div class="section-header">
+    <h2>Mejor valoradas</h2>
+    <a routerLink="/empresas" class="see-all">Ver todas →</a>
+  </div>
+
+  <div class="companies-list">
+    @for (e of empresas(); track e.id; let i = $index) {
+    <a [routerLink]="['/empresas', e.id]" class="company-row card">
+      <div class="company-row__logo" [style.background]="e.logo_color">{{ e.logo_emoji }}</div>
+      <div class="company-row__info">
+        <span class="company-row__name">{{ e.nombre }}</span>
+        <span class="company-row__cat">{{ e.categoria }}</span>
+        <div class="company-row__stats">
+          <span class="rating-badge">{{ e.valoracion_media | number:'1.1-1' }}</span>
+          <app-star-rating [rating]="e.valoracion_media" size="sm" />
+          <span class="muted-text" style="font-size:12px">{{ e.total_resenas | number }} reseñas</span>
+        </div>
+      </div>
+      <span class="company-row__rank">#{{ i + 1 }}</span>
+    </a>
+    }
+  </div>
+</section>

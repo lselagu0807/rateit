@@ -1,0 +1,55 @@
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">RateIt</div>
+    <h1>{{ mode() === 'login' ? 'Bienvenido de nuevo' : 'Crear cuenta' }}</h1>
+    <p class="auth-sub">{{ mode() === 'login' ? 'Inicia sesión para continuar' : 'Únete a la comunidad de RateIt' }}</p>
+
+    @if (error()) {
+      <div class="auth-error">{{ error() }}</div>
+    }
+
+    @if (mode() === 'login') {
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="loginForm.email" placeholder="tu@email.com" (keyup.enter)="submit()" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="loginForm.password" placeholder="••••••••" (keyup.enter)="submit()" />
+      </div>
+    } @else {
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" [(ngModel)]="registerForm.nombre" placeholder="Tu nombre" />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" [(ngModel)]="registerForm.email" placeholder="tu@email.com" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="registerForm.password" placeholder="Mínimo 6 caracteres" />
+      </div>
+      <div class="form-group">
+        <label>Ciudad <span class="optional">(opcional)</span></label>
+        <input type="text" [(ngModel)]="registerForm.ciudad" placeholder="Madrid, Barcelona..." />
+      </div>
+    }
+
+    <button class="btn-primary auth-btn" (click)="submit()" [disabled]="loading()">
+      @if (loading()) { Cargando... } @else { {{ mode() === 'login' ? 'Iniciar sesión' : 'Crear cuenta' }} }
+    </button>
+
+    <div class="auth-toggle">
+      {{ mode() === 'login' ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?' }}
+      <button (click)="toggle()">{{ mode() === 'login' ? 'Regístrate' : 'Inicia sesión' }}</button>
+    </div>
+
+    @if (mode() === 'login') {
+      <div class="auth-demo">
+        <span>Cuentas de prueba:</span>
+        <code>admin&#64;rateit.com</code> o <code>alejandro&#64;email.com</code> · contraseña: <code>password</code>
+      </div>
+    }
+  </div>
+</div>

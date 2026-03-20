@@ -1,0 +1,120 @@
+<div class="page-container">
+  <div class="page-header">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between">
+      <div>
+        <h1>Reseñas</h1>
+        <p>Opiniones verificadas de usuarios reales</p>
+      </div>
+      <button class="btn-primary" (click)="openCreate()">+ Nueva reseña</button>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filter-bar">
+    <button [class.active]="filterPuntuacion() === 0" (click)="setFilter(0)">Todas</button>
+    <button [class.active]="filterPuntuacion() === 5" (click)="setFilter(5)">★★★★★ Excelente</button>
+    <button [class.active]="filterPuntuacion() === 4" (click)="setFilter(4)">★★★★☆ Bien</button>
+    <button [class.active]="filterPuntuacion() === 3" (click)="setFilter(3)">★★★☆☆ Regular</button>
+    <button [class.active]="filterPuntuacion() === 2" (click)="setFilter(2)">★★☆☆☆ Mal</button>
+    <button [class.active]="filterPuntuacion() === 1" (click)="setFilter(1)">★☆☆☆☆ Pésimo</button>
+  </div>
+
+  @if (loading()) {
+  <div class="spinner"></div>
+  } @else if (resenas().length === 0) {
+  <div class="empty-state">
+    <div class="empty-icon">💬</div>
+    <h3>Sin reseñas</h3>
+    <p>No hay reseñas con este filtro</p>
+  </div>
+  } @else {
+  <div class="resenas-list">
+    @for (r of resenas(); track r.id) {
+    <div class="resena-card card">
+      <div class="resena-card__top">
+        <div class="resena-card__user">
+          <div class="resena-card__avatar" [style.background]="avatarColor(r.usuario_nombre)">
+            {{ initials(r.usuario_nombre) }}
+          </div>
+          <div>
+            <div class="resena-card__name">{{ r.usuario_nombre }}</div>
+            <a [routerLink]="['/empresas', r.empresa_id]" class="resena-card__company">→ {{ r.empresa_nombre }}</a>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <app-star-rating [rating]="r.puntuacion" size="sm" />
+          <div class="muted-text" style="font-size:11px;margin-top:3px">{{ timeAgo(r.created_at) }}</div>
+        </div>
+      </div>
+
+      <h3 class="resena-card__title">{{ r.titulo }}</h3>
+      <p class="resena-card__body">{{ r.cuerpo }}</p>
+
+      <div class="resena-card__footer">
+        <div style="display:flex;align-items:center;gap:8px">
+          @if (r.verificada) { <span class="tag">Verificada</span> }
+          <button class="btn-ghost" style="padding:5px 12px;font-size:12px" (click)="marcarUtil(r)">
+            👍 Útil ({{ r.util_count }})
+          </button>
+        </div>
+        @if (canEditResena(r)) {
+        <div style="display:flex;gap:6px">
+          <button class="btn-ghost" style="padding:5px 12px;font-size:12px" (click)="openEdit(r)">Editar</button>
+          <button class="btn-danger" style="padding:5px 12px;font-size:12px" (click)="delete(r.id)">Eliminar</button>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>
+
+<!-- MODAL RESEÑA -->
+@if (showModal()) {
+<div class="modal-backdrop" (click)="showModal.set(false)">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>{{ editTarget() ? 'Editar reseña' : 'Nueva reseña' }}</h2>
+
+    @if (!editTarget()) {
+    <div class="form-group">
+      <label>Empresa *</label>
+      <select [(ngModel)]="form.empresa_id">
+        <option [value]="0">Selecciona una empresa</option>
+        @for (e of empresas(); track e.id) {
+        <option [value]="e.id">{{ e.nombre }}</option>
+        }
+      </select>
+    </div>
+    }
+
+    <div class="form-group">
+      <label>Puntuación *</label>
+      <app-star-rating [rating]="form.puntuacion" [interactive]="true" size="lg"
+        (ratingChange)="form.puntuacion = $event" />
+    </div>
+    <div class="form-group">
+      <label>Título *</label>
+      <input type="text" [(ngModel)]="form.titulo" placeholder="Resume tu experiencia..." />
+    </div>
+    <div class="form-group">
+      <label>Tu opinión *</label>
+      <textarea [(ngModel)]="form.cuerpo" placeholder="Cuéntanos más detalles..." rows="4"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" (click)="showModal.set(false)">Cancelar</button>
+      <button class="btn-primary" (click)="save()" [disabled]="!form.puntuacion || !form.titulo">
+        {{ editTarget() ? 'Guardar cambios' : 'Publicar reseña' }}
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+
+
+@if (toast()) {
+<div class="toast" [class]="toast()!.type">
+  {{ toast()!.type === 'success' ? '✓' : '✕' }} {{ toast()!.msg }}
+</div>
+}

@@ -1,0 +1,11 @@
+Options -Indexes
+
+# ── CORS para desarrollo Angular (localhost:4200) ──
+Header always set Access-Control-Allow-Origin "http://localhost:4200"
+Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+# Responder OK a preflight OPTIONS sin llegar a PHP
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]

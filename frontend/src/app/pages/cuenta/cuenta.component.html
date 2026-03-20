@@ -1,0 +1,77 @@
+<div class="page-container">
+  <div class="account-header card">
+    <div class="account-avatar">{{ initials() }}</div>
+    <div class="account-info">
+      <h1>{{ auth.currentUser()?.nombre }}</h1>
+      <span class="muted-text" style="font-size:14px">{{ auth.currentUser()?.email }}</span>
+      <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+        @if (auth.currentUser()?.verificado) { <span class="tag">Verificado</span> }
+        @if (auth.isAdmin()) { <span class="tag" style="background:rgba(245,158,11,0.12);color:#f59e0b">Admin</span> }
+      </div>
+    </div>
+    <div class="account-meta">
+      <div class="meta-stat">
+        <span class="meta-stat__num">{{ resenas().length }}</span>
+        <span class="meta-stat__label">Reseñas</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card card">
+    <h2>Datos personales</h2>
+    <div class="form-group">
+      <label>Nombre completo</label>
+      <input type="text" [(ngModel)]="form.nombre" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" [value]="auth.currentUser()?.email" disabled style="opacity:0.5;cursor:not-allowed" />
+    </div>
+    <div class="form-group">
+      <label>Ciudad</label>
+      <input type="text" [(ngModel)]="form.ciudad" />
+    </div>
+    <div class="form-group">
+      <label>Nueva contraseña <span style="color:var(--muted);font-size:11px">(dejar vacío para no cambiar)</span></label>
+      <input type="password" [(ngModel)]="form.password" placeholder="Mínimo 6 caracteres" />
+    </div>
+    <button class="btn-primary" (click)="save()">Guardar cambios</button>
+  </div>
+
+  <div class="section-card">
+    <h2>Mis reseñas</h2>
+    @if (resenas().length === 0) {
+      <div class="empty-state" style="padding:32px">
+        <div class="empty-icon">✍️</div>
+        <h3>Todavía no has escrito reseñas</h3>
+        <p>Comparte tu experiencia con otras personas</p>
+      </div>
+    } @else {
+      <div class="mis-resenas">
+        @for (r of resenas(); track r.id) {
+          <div class="resena-mini card">
+            <div class="resena-mini__top">
+              <div>
+                <span class="resena-mini__empresa">{{ r.empresa_nombre }}</span>
+                <span class="resena-mini__cat muted-text"> · {{ r.empresa_categoria }}</span>
+              </div>
+              <app-star-rating [rating]="r.puntuacion" size="sm" />
+            </div>
+            <h3 class="resena-mini__title">{{ r.titulo }}</h3>
+            <p class="resena-mini__body">{{ r.cuerpo }}</p>
+            <div class="resena-mini__foot">
+              <span class="muted-text" style="font-size:12px">{{ timeAgo(r.created_at) }}</span>
+              <span class="muted-text" style="font-size:12px">👍 {{ r.util_count }} útil</span>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+@if (toast()) {
+  <div class="toast" [class]="toast()!.type">
+    {{ toast()!.type === 'success' ? '✓' : '✕' }} {{ toast()!.msg }}
+  </div>
+}

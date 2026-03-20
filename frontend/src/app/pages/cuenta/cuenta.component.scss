@@ -1,0 +1,74 @@
+.account-header {
+  display:       flex;
+  align-items:   center;
+  gap:           20px;
+  padding:       24px;
+  margin-bottom: 16px;
+}
+
+.account-avatar {
+  width:           72px; height: 72px;
+  border-radius:   50%;
+  background:      var(--brand-dark);
+  display:         flex;
+  align-items:     center;
+  justify-content: center;
+  font-size:       24px; font-weight: 500; color: #fff;
+  flex-shrink:     0;
+}
+
+.account-info {
+  flex: 1;
+  h1 { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+}
+
+.account-meta { text-align: center; }
+
+.meta-stat {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  &__num   { font-family: var(--font-display); font-size: 28px; font-weight: 700; color: var(--brand); }
+  &__label { font-size: 12px; color: var(--muted); }
+}
+
+.section-card {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding:       24px;
+  margin-bottom: 16px;
+
+  h2 {
+    font-family:   var(--font-display);
+    font-size:     20px;
+    font-weight:   600;
+    margin-bottom: 20px;
+  }
+}
+
+.mis-resenas { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+
+.resena-mini {
+  padding: 16px 18px;
+
+  &__top {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    margin-bottom:   8px;
+  }
+
+  &__empresa { font-size: 14px; font-weight: 500; color: var(--brand); }
+  &__cat     { font-size: 13px; }
+  &__title   { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  &__body    { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+  &__foot {
+    display:         flex;
+    justify-content: space-between;
+    margin-top:      10px;
+    padding-top:     8px;
+    border-top:      1px solid var(--border);
+  }
+}
