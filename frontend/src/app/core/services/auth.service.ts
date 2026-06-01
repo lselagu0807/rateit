@@ -22,7 +22,7 @@ interface AuthResponse {
 export class AuthService {
   private readonly http   = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly API    = 'http://localhost/rateit/backend/api/auth/';
+  private readonly API    = '/api/auth/';
   private readonly STORAGE_KEY = 'rateit_user';
 
   // Signal con el usuario actual
