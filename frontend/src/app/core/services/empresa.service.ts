@@ -6,7 +6,7 @@ import { Empresa, EmpresaForm, ApiResponse } from '../models/models';
 @Injectable({ providedIn: 'root' })
 export class EmpresaService {
   private readonly http = inject(HttpClient);
-  private readonly API  = 'http://localhost/rateit/backend/api/empresas/';
+  private readonly API  = '/api/empresas/';
 
   getAll(sort: string = 'valoracion_media', order: string = 'desc'): Observable<Empresa[]> {
     const params = new HttpParams().set('sort', sort).set('order', order);
