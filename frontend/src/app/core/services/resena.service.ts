@@ -6,7 +6,7 @@ import { Resena, ResenaForm, ApiResponse } from '../models/models';
 @Injectable({ providedIn: 'root' })
 export class ResenaService {
   private readonly http = inject(HttpClient);
-  private readonly API  = 'http://localhost/rateit/backend/api/resenas/';
+  private readonly API  = '/api/resenas/';
 
   getAll(puntuacion?: number): Observable<Resena[]> {
     let params = new HttpParams();
